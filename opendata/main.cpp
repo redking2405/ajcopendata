@@ -6,6 +6,7 @@
 #include <vector>
 
 using namespace std;
+//typedef std::basic_string<unsigned char> ustring;
 
 typedef struct Datalist Datalist;
 
@@ -14,6 +15,17 @@ struct Datalist{
     char* data;
 
 };
+
+/*!
+ * \brief MakePieChart
+ * \param im
+ * \param f
+ * \param data
+ * \param colors
+ * \param center
+ * \param radius
+ * Créer un graphique en camenbert dans une image donnée, supposé créer la légende avec mais ne fonctionne pas
+ */
 
 void MakePieChart(gdImagePtr im, gdFontPtr f, vector<Datalist> data, int colors[], int center, int radius)
 {
@@ -68,10 +80,10 @@ int main()
     bikeused = (bikeused/capacity)*100;
     Datalist bikeusedD;
     bikeusedD.percent = bikeused;
-    //strcpy(bikeusedD.data ,"bikes used");
+    //bikeusedD.data = "bikes used";
     Datalist bikeA;
     bikeA.percent = bikeavailable;
-    //strcpy(bikeA.data, "bikes available");
+    //bikeA.data= "bikes available";
     vector<Datalist> datas;
     datas.push_back(bikeusedD);
     gdImagePtr im;
