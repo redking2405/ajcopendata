@@ -45,6 +45,35 @@ int main()
     buffer << fJson.rdbuf();
     //cout<<buffer.str();
     auto json = nlohmann::json::parse(buffer.str());
+    int capacity=0;
+    int bikeused;
+    int bikeavailable=0;
+    for(auto& elm : json.items() )
+    {
+        nlohmann::json object = elm.value();
+
+        //cout<<object["name"]<<"\n\n";
+        capacity += object["capacity"].get<int>();
+        //cout<<object["capacity"]<<"\n\n";
+        //cout<<"capacity : "<<capacity<<"\n";
+
+        bikeavailable += object["num_bikes_available"].get<int>();
+
+        //cout<<object["num_bikes_available"]<<"\n\n";
+        //cout<<"bike available : "<<bikeavailable<<"\n";
+    }
+
+    bikeused = capacity-bikeavailable;
+    bikeavailable = (bikeavailable/capacity)*100;
+    bikeused = (bikeused/capacity)*100;
+    Datalist bikeusedD;
+    bikeusedD.percent = bikeused;
+    //strcpy(bikeusedD.data ,"bikes used");
+    Datalist bikeA;
+    bikeA.percent = bikeavailable;
+    //strcpy(bikeA.data, "bikes available");
+    vector<Datalist> datas;
+    datas.push_back(bikeusedD);
     gdImagePtr im;
     FILE* pngout;
     int sizeX=256;
@@ -66,37 +95,13 @@ int main()
     int colors[4] = {black, red, blue,green};
     font = gdFontGetGiant();
 
-    int capacity;
-    int bikeused;
-    int bikeavailable;
-    for(auto& elm : json.items() )
-    {
-        nlohmann::json object = elm.value();
 
-        //cout<<object["name"]<<"\n\n";
-        capacity += object["capacity"].get<int>();
-        //cout<<object["capacity"]<<"\n\n";
-        bikeavailable += object["num bikes available"].get<int>();
-        //cout<<object["num_bikes_available"]<<"\n\n";
-    }
-
-    bikeused = capacity-bikeavailable;
-    bikeavailable = (bikeavailable/capacity)*100;
-    bikeused = (bikeused/capacity)*100;
-    Datalist bikeusedD;
-    bikeusedD.percent = bikeused;
-    strcpy(bikeusedD.data ,"bikes used");
-    Datalist bikeA;
-    bikeA.percent = bikeavailable;
-    strcpy(bikeA.data, "bikes available");
-    vector<Datalist> datas;
-    datas.push_back(bikeusedD);
     MakePieChart(im, font, datas, colors, sizeX/2, sizeX/4);
     pngout = fopen("graph.png", "wb");
     gdImagePng(im, pngout);
     fclose(pngout);
     gdImageDestroy(im);
-    //cout<<json;
+
 
     return 0;
 }
